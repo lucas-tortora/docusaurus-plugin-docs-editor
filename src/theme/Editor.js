@@ -159,7 +159,8 @@ export default function Editor({ options, className }) {
 
   const requestAuthorizationToken = async (code) => {
     if (authorizationMethod === 'GET') {
-      const url = new URL(authorizationTokenUrl + code);
+      const url = new URL(code, authorizationTokenUrl);
+
       return await fetch(url)
         .then((response) => response.json())
         .then((data) => data.token);
@@ -168,14 +169,9 @@ export default function Editor({ options, className }) {
         method: 'POST',
         mode: 'cors',
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+          'content-type': 'application/json',
         },
-
-        //make sure to serialize your JSON body
-        body: JSON.stringify({
-          code,
-        }),
+        body: JSON.stringify({ code }),
       })
         .then((response) => response.json())
         .then((data) => data.token);
